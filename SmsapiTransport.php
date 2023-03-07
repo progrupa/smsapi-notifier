@@ -33,6 +33,7 @@ final class SmsapiTransport extends AbstractTransport
     private string $from;
     private bool $fast = false;
     private bool $test = false;
+    private bool $normalize = false;
 
     public function __construct(#[\SensitiveParameter] string $authToken, string $from, HttpClientInterface $client = null, EventDispatcherInterface $dispatcher = null)
     {
@@ -61,6 +62,16 @@ final class SmsapiTransport extends AbstractTransport
 
         return $this;
     }
+        
+    /**
+     * @return $this
+     */
+    public function setNormalize(bool $normalize): static
+    {
+        $this->normalize = $normalize;
+
+        return $this;
+    }
 
     public function __toString(): string
     {
@@ -72,6 +83,10 @@ final class SmsapiTransport extends AbstractTransport
 
         if ($this->test) {
             $dsn .= sprintf('&test=%d', (int) $this->test);
+        }
+        
+        if ($this->normalize) {
+            $dsn .= sprintf('&normalize=%d', (int) $this->normalize);
         }
 
         return $dsn;
@@ -101,6 +116,7 @@ final class SmsapiTransport extends AbstractTransport
                 'format' => 'json',
                 'encoding' => 'utf-8',
                 'test' => $this->test,
+                'normalize' => $this->normalize
             ],
         ]);
 
