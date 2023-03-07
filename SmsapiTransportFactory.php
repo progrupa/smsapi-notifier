@@ -33,9 +33,10 @@ final class SmsapiTransportFactory extends AbstractTransportFactory
         $host = 'default' === $dsn->getHost() ? null : $dsn->getHost();
         $fast = filter_var($dsn->getOption('fast', false), \FILTER_VALIDATE_BOOL);
         $test = filter_var($dsn->getOption('test', false), \FILTER_VALIDATE_BOOL);
+        $normalize = filter_var($dsn->getOption('normalize', false), \FILTER_VALIDATE_BOOL);
         $port = $dsn->getPort();
 
-        return (new SmsapiTransport($authToken, $from, $this->client, $this->dispatcher))->setFast($fast)->setHost($host)->setPort($port)->setTest($test);
+        return (new SmsapiTransport($authToken, $from, $this->client, $this->dispatcher))->setFast($fast)->setHost($host)->setPort($port)->setTest($test)->setNormalize($normalize);
     }
 
     protected function getSupportedSchemes(): array
